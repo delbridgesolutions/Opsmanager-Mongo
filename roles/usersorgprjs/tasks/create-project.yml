@@ -1,0 +1,90 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+        file: vars/global-vars.yml
+        
+- name: Fetch the Secrets from the aws Secret manager
+  set_fact:
+     organizationid: "{{ lookup('amazon.aws.aws_secret', OrganizationSecretName, region=aws_region) }}"
+     Api_Keys: "{{ lookup('amazon.aws.aws_secret', ApiKeySecretName, region=aws_region)}}"
+
+- name: "Retrieve  Project"
+  uri:
+    url: "{{ om_url.0 }}/api/public/v1.0/groups"
+    validate_certs: false
+    method: GET
+    headers:
+      Content-Type: "application/json"
+    status_code: 200
+    return_content: yes
+    user: "{{ Api_Keys.public_key }}"
+    password: "{{ Api_Keys.private_key }}"
+  register: existing_projects
+
+- name: List of "Retrieve Project"
+  ansible.builtin.debug:
+     msg: "{{ existing_projects.json.results | map(attribute='name') | list }}"
+
+- name: Creating new project which doesn't exits in the Ops manager
+  block:
+    - name: Create projects
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/groups?pretty=true"
+        validate_certs: false
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body: '{"name": "{{ item }}", "orgId": "{{ organizationid }}" }'
+        status_code: [201, 409]
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"
+      register: project_result
+      when: "'{{ item }}' not in existing_projects.json.results  | map(attribute='name') | list"
+      with_items: "{{ project_names }}"
+
+    - name: Print the full output - project_result
+      ansible.builtin.debug:
+        msg: "{{ project_result}}"
+
+    - name: Saving project secrets in AWS Secrets Manager
+      community.aws.secretsmanager_secret:
+        state: present
+        name: "{{ item.json.name }}"
+        secret: "{\"Project_id\":\"{{ item.json.id }}\", \"agentApiKey\":\"{{ item.json.agentApiKey }}\"}"
+      when: "'{{ item.item }}' not in existing_projects.json.results  | map(attribute='name') | list"
+      with_items: "{{ project_result.results }}"
+
+    - name: "Retrieve Admin User"
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/users/byName/{{ om_username }}"
+        validate_certs: false
+        method: GET
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"
+      register: user_info
+
+    - name:  Print the full output
+      ansible.builtin.debug:
+        var: user_info.json.id
+
+    - name: "Add user as Project Owner"
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/groups/{{ item.json.id }}/users?pretty=true"
+        validate_certs: false
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Accept: "application/json"
+        body_format: json
+        body: '[{ "id": "{{user_info.json.id}}", "roles": [{ "roleName": "GROUP_OWNER" }]}]'
+        status_code: 200
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"
+      loop: "{{  project_result.results }}"
+      when: "'{{ item.item }}' not in existing_projects.json.results  | map(attribute='name') | list"

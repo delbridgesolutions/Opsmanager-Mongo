@@ -1,0 +1,152 @@
+{
+    "version": 1,
+    "tls": {
+      "CAFilePath": "/etc/pki/tls/certs/ca-bundle.crt",
+      "clientCertificateMode": "OPTIONAL"
+    },
+    "auth": {
+      "authoritativeSet": false,
+      "autoAuthMechanism": "MONGODB-CR",
+      "autoAuthMechanisms": [],
+      "autoAuthRestrictions": [],
+      "disabled": true,
+      "usersDeleted": [],
+      "usersWanted": []
+    },
+    "options": {
+      "downloadBase": "/var/lib/mongodb-mms-automation"
+    },
+    "backupVersions": [
+      {
+        "hostname": "projects-mihai-0.db.cn-northwest-1.aws.commercetoolscn.cn"
+      }
+    ],
+    "monitoringVersions": [
+      {
+        "hostname": "projects-mihai-0.db.cn-northwest-1.aws.commercetoolscn.cn"
+      }
+    ],
+    "processes": [
+      {
+        "args2_6": {
+          "net": {
+            "port": 27017,
+            "tls": {
+              "mode": "requireTLS",
+              "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+            }
+          },
+          "storage": {
+            "dbPath": "/data/db"
+          },
+          "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+          },
+          "replication": {
+            "replSetName": "hiten-rs0"
+          }
+        },
+        "hostname": "projects-mihai-0.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "name": "projects-mihai-0.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+          "sizeThresholdMB": 1000,
+          "timeThresholdHrs": 24
+        },
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+      },
+      {
+        "args2_6": {
+          "net": {
+            "port": 27017,
+            "tls": {
+              "mode": "requireTLS",
+              "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+            }
+          },
+          "storage": {
+            "dbPath": "/data/db"
+          },
+          "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+          },
+          "replication": {
+            "replSetName": "hiten-rs0"
+          }
+        },
+        "hostname": "projects-mihai-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "name": "projects-mihai-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+          "sizeThresholdMB": 1000,
+          "timeThresholdHrs": 24
+        },
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+      },
+      {
+        "args2_6": {
+          "net": {
+            "port": 27017,
+            "tls": {
+              "mode": "requireTLS",
+              "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+            }
+          },
+          "storage": {
+            "dbPath": "/data/db"
+          },
+          "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+          },
+          "replication": {
+            "replSetName": "hiten-rs0"
+          }
+        },
+        "hostname": "projects-mihai-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "name": "projects-mihai-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+          "sizeThresholdMB": 1000,
+          "timeThresholdHrs": 24
+        },
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+      }
+    ],
+    "replicaSets": [
+      {
+        "_id": "hiten-rs0",
+        "protocolVersion": 1,
+        "members": [
+          {
+            "_id": 0,
+            "host": "projects-mihai-0.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "priority": "1",
+            "votes": "1"
+          },
+          {
+            "_id": 1,
+            "host": "projects-mihai-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "priority": "1",
+            "votes": "1"
+          },
+          {
+            "_id": 2,
+            "host": "projects-mihai-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "priority": "1",
+            "votes": "1"
+          }
+        ]
+      }
+    ],
+    "sharding": []
+  }
+  

@@ -1,0 +1,17 @@
+- name: Enable Monitoring
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    om_url:
+      - https://staging-om.db.cn-northwest-1.aws.commercetoolscn.cn:8443
+    aws_region: "cn-northwest-1"
+    project_name: "ansible-test-1-cn-northwest1.aws.commercetools.cn-0"
+  pre_tasks:
+   - name: Fetch the Secrets from the aws Secret manager
+     set_fact:
+         project_id: "{{ (lookup('amazon.aws.aws_secret', project_name, region=aws_region) | from_json).Project_id }}"
+         public_key: "{{ (lookup('amazon.aws.aws_secret', 'AdminApiKey', region=aws_region) | from_json).public_key }}"
+         private_key: "{{ (lookup('amazon.aws.aws_secret', 'AdminApiKey', region=aws_region) | from_json).private_key }}"
+  roles:
+    - monitoring

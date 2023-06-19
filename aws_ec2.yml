@@ -1,0 +1,18 @@
+plugin: amazon.aws.aws_ec2
+regions:
+- cn-northwest-1
+keyed_groups:
+- key: tags.deployment
+  prefix: tag_deployment_
+  separator: ''
+- key: tags.Project
+  prefix: tag_Project_
+  separator: _
+compose:
+  # This sets the ansible_host variable to connect with the private IP address without changing the hostname.
+  ansible_host: private_ip_address
+  ansible_user: ec2-user
+filters:
+  instance-state-name: running
+  owner-id: 431052860653
+  

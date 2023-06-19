@@ -1,0 +1,711 @@
+{
+    "auth": {
+        "authoritativeSet": false,
+        "autoAuthMechanism": "MONGODB-CR",
+        "autoAuthMechanisms": [],
+        "autoAuthRestrictions": [],
+        "disabled": true,
+        "usersDeleted": [],
+        "usersWanted": []
+    },
+    "backupVersions": [{
+        "hostname": "staging-commits-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn"
+    }],
+    "monitoringVersions": [{"hostname": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn"}, {"hostname": "staging-commits-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn"}],
+    "options": {
+        "downloadBase": "/var/lib/mongodb-mms-automation"
+    },
+    "replicaSets": [{
+        "_id": "commitsConfigRs",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-commits-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-commits-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-commits-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "commitsShard1",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-commits-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "commitsShard2",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-commits-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-commits-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-commits-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "commitsShard3",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-commits-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-commits-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-commits-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    }],    
+    "processes": [{
+        "args2_6": {
+            "net": {
+                "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+            },
+            "replication": {
+                "replSetName": "commitsConfigRs"
+            },
+            "sharding": {
+                "clusterRole": "configsvr"
+            },
+            "storage": {
+                "dbPath": "/data/db"
+            },
+            "systemLog": {
+                "destination": "file",
+                "path": "/data/db/mongodb.log"
+            }
+        },
+        "hostname": "staging-commits-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+            "sizeThresholdMB": 1000,
+            "timeThresholdHrs": 24
+        },
+        "name": "staging-commits-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+    },
+    {
+            "args2_6": {
+                "net": {
+                    "port": 27017,
+                    "tls": {
+                        "mode": "requireTLS",
+                        "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                    }
+                },
+                "replication": {
+                    "replSetName": "commitsConfigRs"
+                },
+                "sharding": {
+                    "clusterRole": "configsvr"
+            },
+                "storage": {
+                    "dbPath": "/data/db"
+                },
+                "systemLog": {
+                    "destination": "file",
+                    "path": "/data/db/mongodb.log"
+                }
+            },
+            "hostname": "staging-commits-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "logRotate": {
+                "sizeThresholdMB": 1000,
+                "timeThresholdHrs": 24
+            },
+            "name": "staging-commits-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "processType": "mongod",
+            "version": "4.4.17-ent",
+            "authSchemaVersion": 5,
+            "featureCompatibilityVersion": "4.4"
+        },
+    {
+        "args2_6": {
+            "net": {
+                "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+            },
+            "replication": {
+                "replSetName": "commitsConfigRs"
+            },
+            "sharding": {
+                "clusterRole": "configsvr"
+            },
+            "storage": {
+                "dbPath": "/data/db"
+            },
+            "systemLog": {
+                "destination": "file",
+                "path": "/data/db/mongodb.log"
+            }
+        },
+        "hostname": "staging-commits-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+            "sizeThresholdMB": 1000,
+            "timeThresholdHrs": 24
+        },
+        "name": "staging-commits-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "commitsShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-commits-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-commits-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-commits-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-commits-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "commits-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    }],
+    "sharding": [{
+        "managedSharding": false,
+        "name": "commits-sh0",
+        "configServerReplica": "commitsConfigRs",
+        "shards": [
+            {
+                "_id": "commitsShard1",
+                "rs": "commitsShard1"
+            },
+            {
+                "_id": "commitsShard2",
+                "rs": "commitsShard2"
+            },
+            {
+                "_id": "commitsShard3",
+                "rs": "commitsShard3"
+            }
+        ]
+    }],
+    "tls": {
+        "CAFilePath": "/etc/pki/tls/certs/ca-bundle.crt",
+        "clientCertificateMode": "OPTIONAL"
+    },
+    "version": 1
+}

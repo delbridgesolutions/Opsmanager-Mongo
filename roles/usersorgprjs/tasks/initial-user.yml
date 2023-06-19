@@ -1,0 +1,30 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+- name: Create frist user
+  block:
+    - name: Generate API keys if not present in AWS Secret Manager
+      become: yes
+      ansible.builtin.uri:
+        url: '{{ om_url.0 }}/api/public/v1.0/unauth/users?pretty=true'
+        method: POST
+        validate_certs: false
+        follow_redirects: all
+        headers:
+          Content-Type: application/json
+        body_format: json
+        status_code: 201
+        body: '{{ api_call }}'
+        return_content: 'yes'
+      register: user_create_result
+
+    - name: Second Task - Print the full output
+      ansible.builtin.debug:
+        var: user_create_result
+
+    - name: Saving Private key to AWS Secret Manager
+      community.aws.secretsmanager_secret:
+        region: "{{ aws_region }}"
+        name: "{{ ApiKeySecretName }}"
+        state: present
+        secret: '{"private_key":"{{ user_create_result.json.programmaticApiKey.privateKey }}", "public_key":"{{ user_create_result.json.programmaticApiKey.publicKey }}"}'

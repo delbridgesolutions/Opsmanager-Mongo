@@ -1,0 +1,20 @@
+- name: Execute 'om-backup-init.sh' script with arguments
+  become: true
+  ansible.builtin.import_tasks: init-backup.yml
+  when: groups['{{ group_name }}'][0] in inventory_hostname and Enable_backup == "True"
+
+- name: Execute 'om-init.sh' script with arguments
+  become: true
+  ansible.builtin.import_tasks: init-om.yml
+  when: groups['{{ group_name }}'][1] in inventory_hostname and om_nodes == "True"
+
+- name: Execute 'om-init.sh' script with arguments
+  become: true
+  ansible.builtin.import_tasks: init-om.yml
+  when: groups['{{ group_name }}'][2] in inventory_hostname and om_nodes == "True"
+
+- name: Execute 'init.sh' script with arguments
+  become: true
+  ansible.builtin.import_tasks: init.yml
+  when: Cluster_Nodes == "True"
+

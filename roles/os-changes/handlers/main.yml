@@ -1,0 +1,12 @@
+- name: Reload sysctl
+  become: true
+  command: sysctl -p
+- name: Reload limits
+  become: true
+  command: ulimit -n unlimited && systemctl daemon-reload
+- name: Reboot server
+  become: true
+  reboot:
+    msg: "Ansible initiated reboot"
+  register: reboot_output
+ 

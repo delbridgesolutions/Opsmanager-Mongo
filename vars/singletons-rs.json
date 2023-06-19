@@ -1,0 +1,512 @@
+{
+    "auth": {
+        "authoritativeSet": false,
+        "autoAuthMechanism": "MONGODB-CR",
+        "autoAuthMechanisms": [],
+        "autoAuthRestrictions": [],
+        "disabled": true,
+        "usersDeleted": [],
+        "usersWanted": []
+    },
+    "backupVersions": [{
+        "hostname": "staging-locking-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-multitenancy-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-oauthtokens-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-subscriptions-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    }
+    ],
+    "monitoringVersions": [{
+        "hostname": "staging-locking-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-multitenancy-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-oauthtokens-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-subscriptions-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    }],
+    "options": {
+        "downloadBase": "/var/lib/mongodb-mms-automation"
+    },
+    "replicaSets": [{
+        "_id": "locking",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-locking-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-locking-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-locking-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "multitenancy",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-multitenancy-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-multitenancy-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-multitenancy-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "oauthtokens",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-oauthtokens-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-oauthtokens-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-oauthtokens-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "subscriptions",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-subscriptions-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-subscriptions-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-subscriptions-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    }],    
+    "processes": [{
+        "args2_6": {
+            "net": {
+                "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+            },
+            "replication": {
+                "replSetName": "locking"
+            },
+            "storage": {
+                "dbPath": "/data/db"
+            },
+            "systemLog": {
+                "destination": "file",
+                "path": "/data/db/mongodb.log"
+            }
+        },
+        "hostname": "staging-locking-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+            "sizeThresholdMB": 1000,
+            "timeThresholdHrs": 24
+        },
+        "name": "staging-locking-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "locking"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-locking-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-locking-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "locking"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-locking-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-locking-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "multitenancy"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-multitenancy-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-multitenancy-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "multitenancy"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-multitenancy-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-multitenancy-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "multitenancy"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-multitenancy-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-multitenancy-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "oauthtokens"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-oauthtokens-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-oauthtokens-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "oauthtokens"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-oauthtokens-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-oauthtokens-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "oauthtokens"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-oauthtokens-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-oauthtokens-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "subscriptions"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-subscriptions-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-subscriptions-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "subscriptions"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-subscriptions-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-subscriptions-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    },
+    {
+       "args2_6": {
+           "net": {
+               "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+           },
+           "replication": {
+               "replSetName": "subscriptions"
+           },
+           "storage": {
+               "dbPath": "/data/db"
+           },
+           "systemLog": {
+               "destination": "file",
+               "path": "/data/db/mongodb.log"
+           }
+       },
+       "hostname": "staging-subscriptions-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "logRotate": {
+           "sizeThresholdMB": 1000,
+           "timeThresholdHrs": 24
+       },
+       "name": "staging-subscriptions-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+       "processType": "mongod",
+       "version": "4.4.17-ent",
+       "authSchemaVersion": 5,
+       "featureCompatibilityVersion": "4.4"
+    }],
+    "tls": {
+        "CAFilePath": "/etc/pki/tls/certs/ca-bundle.crt",
+        "clientCertificateMode": "OPTIONAL"
+    },
+    "version": 1
+}

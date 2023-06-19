@@ -1,0 +1,711 @@
+{
+    "auth": {
+        "authoritativeSet": false,
+        "autoAuthMechanism": "MONGODB-CR",
+        "autoAuthMechanisms": [],
+        "autoAuthRestrictions": [],
+        "disabled": true,
+        "usersDeleted": [],
+        "usersWanted": []
+    },
+    "backupVersions": [{
+        "hostname": "staging-orders-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn"
+    },
+    {
+        "hostname": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn"
+    }],
+    "monitoringVersions": [{"hostname": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn"}, {"hostname": "staging-orders-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn"}],
+    "options": {
+        "downloadBase": "/var/lib/mongodb-mms-automation"
+    },
+    "replicaSets": [{
+        "_id": "ordersConfigRs",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-orders-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-orders-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-orders-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "ordersShard1",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-orders-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "ordersShard2",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-orders-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-orders-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-orders-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    },
+    {
+        "_id": "ordersShard3",
+        "protocolVersion": "1",
+        "members": [
+            {
+                "_id": 0,
+                "host": "staging-orders-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 1,
+                "host": "staging-orders-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            },
+            {
+                "_id": 2,
+                "host": "staging-orders-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+                "priority": "1",
+                "votes": "1"
+            }
+        ]
+    }],    
+    "processes": [{
+        "args2_6": {
+            "net": {
+                "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+            },
+            "replication": {
+                "replSetName": "ordersConfigRs"
+            },
+            "sharding": {
+                "clusterRole": "configsvr"
+            },
+            "storage": {
+                "dbPath": "/data/db"
+            },
+            "systemLog": {
+                "destination": "file",
+                "path": "/data/db/mongodb.log"
+            }
+        },
+        "hostname": "staging-orders-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+            "sizeThresholdMB": 1000,
+            "timeThresholdHrs": 24
+        },
+        "name": "staging-orders-conf-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+    },
+    {
+            "args2_6": {
+                "net": {
+                    "port": 27017,
+                    "tls": {
+                        "mode": "requireTLS",
+                        "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                    }
+                },
+                "replication": {
+                    "replSetName": "ordersConfigRs"
+                },
+                "sharding": {
+                    "clusterRole": "configsvr"
+            },
+                "storage": {
+                    "dbPath": "/data/db"
+                },
+                "systemLog": {
+                    "destination": "file",
+                    "path": "/data/db/mongodb.log"
+                }
+            },
+            "hostname": "staging-orders-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "logRotate": {
+                "sizeThresholdMB": 1000,
+                "timeThresholdHrs": 24
+            },
+            "name": "staging-orders-conf-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+            "processType": "mongod",
+            "version": "4.4.17-ent",
+            "authSchemaVersion": 5,
+            "featureCompatibilityVersion": "4.4"
+        },
+    {
+        "args2_6": {
+            "net": {
+                "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+            },
+            "replication": {
+                "replSetName": "ordersConfigRs"
+            },
+            "sharding": {
+                "clusterRole": "configsvr"
+            },
+            "storage": {
+                "dbPath": "/data/db"
+            },
+            "systemLog": {
+                "destination": "file",
+                "path": "/data/db/mongodb.log"
+            }
+        },
+        "hostname": "staging-orders-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "logRotate": {
+            "sizeThresholdMB": 1000,
+            "timeThresholdHrs": 24
+        },
+        "name": "staging-orders-conf-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+        "processType": "mongod",
+        "version": "4.4.17-ent",
+        "authSchemaVersion": 5,
+        "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard1"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard2"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27017,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "replication": {
+            "replSetName": "ordersShard3"
+        },
+        "storage": {
+            "dbPath": "/data/db"
+        },
+        "systemLog": {
+            "destination": "file",
+            "path": "/data/db/mongodb.log"
+        }
+    },
+    "hostname": "staging-orders-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "logRotate": {
+        "sizeThresholdMB": 1000,
+        "timeThresholdHrs": 24
+    },
+    "name": "staging-orders-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "processType": "mongod",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-1.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-2.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-3.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-4.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-5.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-6.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-7.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-8.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    },
+    {
+    "args2_6": {
+        "net": {
+            "port": 27018,
+                "tls": {
+                    "mode": "requireTLS",
+                    "certificateKeyFile": "/etc/pki/tls/certs/mongo.pem"
+                }
+        },
+        "systemLog": {
+            "destination": "syslog"
+        }
+    },
+    "hostname": "staging-orders-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn",
+    "name": "staging-orders-sh0-9.db.cn-northwest-1.aws.commercetoolscn.cn-mongos",
+    "processType": "mongos",
+    "cluster": "orders-sh0",
+    "version": "4.4.17-ent",
+    "authSchemaVersion": 5,
+    "featureCompatibilityVersion": "4.4"
+    }],
+    "sharding": [{
+        "managedSharding": false,
+        "name": "orders-sh0",
+        "configServerReplica": "ordersConfigRs",
+        "shards": [
+            {
+                "_id": "ordersShard1",
+                "rs": "ordersShard1"
+            },
+            {
+                "_id": "ordersShard2",
+                "rs": "ordersShard2"
+            },
+            {
+                "_id": "ordersShard3",
+                "rs": "ordersShard3"
+            }
+        ]
+    }],
+    "tls": {
+        "CAFilePath": "/etc/pki/tls/certs/ca-bundle.crt",
+        "clientCertificateMode": "OPTIONAL"
+    },
+    "version": 1
+}

@@ -1,0 +1,64 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+
+- name: "Set OM Base URL"
+  set_fact:
+    om_base_url: "{{ om_internal_url.0 }}/api/public/v1.0/admin/backup/snapshot/s3Configs"
+    blockstore_uri: "{{groups[group_name].0 }}:{{ mongod_port }},{{groups[group_name].1 }}:{{ mongod_port }},{{groups[group_name].2 }}:{{ mongod_port }}"
+
+- name: "uri"
+  debug: var=blockstore_uri
+
+- name: "Set body for post request"
+  set_fact:
+    call_body: '{ 
+        "id": "s3blockstore",
+        "assignmentEnabled": true,
+        "pathStyleAccessEnabled": true,
+        "acceptedTos": true,
+        "encryptedCredentials": false,
+        "loadFactor": 50,
+        "s3AuthMethod": "IAM_ROLE",
+        "s3BucketEndpoint": "s3.amazonaws.com",
+        "s3BucketName": "{{ s3_blockstore_name.0 }}",
+        "s3MaxConnections": 50,
+        "sseEnabled": true,
+        "uri": "{{ blockstore_uri }}",
+        "ssl": false,
+        "writeConcern": "W2",
+        "disableProxyS3": "false",
+        "s3RegionOverride": "cn-northwest-1"}'
+
+- name: "Printing API call body"
+  debug: var=call_body
+
+# - name: "Check if S3 exists"
+#   uri:
+#     url: "{{ om_base_url }}/s3blockstore?pretty=true"
+#     validate_certs: no
+#     method: GET
+#     headers:
+#       Content-Type: "application/json"
+#     status_code: 200, 404
+#     return_content: yes
+#     user: "{{ public_key }}"
+#     password: "{{ private_key }}"
+#   register: s3_created
+
+
+- name: "Configure S3 Blockstore"
+  uri:
+    url: "{{ om_base_url }}?pretty=true"
+    validate_certs: no
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ call_body }}"
+    status_code: 200
+    return_content: yes
+    user: "{{ public_key }}"
+    password: "{{ private_key }}"
+  register: result
+  #when: s3_created.status == 404

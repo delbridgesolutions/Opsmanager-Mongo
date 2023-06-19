@@ -1,0 +1,20 @@
+- name: Create Admin user, Organization and Projects
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+     first_user: 'True'
+     aws_region: "cn-northwest-1"
+     ApiKeySecretName: "ApiKeys"
+     OrganizationSecretName: "CommerceToolTest"
+     cm_env: "staging "
+     MongoSecretName: "MongoDB-Creds"
+     ApiCallSecretName: "om_api_call_secret"
+  pre_tasks:
+     - name: Fetch the Secrets from the aws Secret manager
+       set_fact:
+         mongodb_password: "{{ (lookup('amazon.aws.aws_secret', MongoSecretName, region=aws_region) | from_json).Password }}"
+         mongodb_username: "{{ (lookup('amazon.aws.aws_secret', MongoSecretName, region=aws_region) | from_json).Username }}"
+         api_call: "{{ lookup('amazon.aws.aws_secret', ApiCallSecretName, region=aws_region) }}"
+  roles:
+     - usersorgprjs

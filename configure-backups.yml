@@ -1,0 +1,9 @@
+- name: Configure S3 Blockstore
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    Api_Keys: "{{ lookup('amazon.aws.aws_secret', ApiKeySecretName, region=aws_region)}}"
+  roles:
+    - s3blockstore
+    - s3oplogstore

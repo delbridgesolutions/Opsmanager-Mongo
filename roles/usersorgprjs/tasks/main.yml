@@ -1,0 +1,14 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+
+- name: Create the initial user
+  include_tasks: initial-user.yml
+  when: first_user == 'True'
+
+- name: Create New organization
+  include_tasks: organization.yml
+ 
+- name: Create projects and save its ID to AWS secret manager
+  include_tasks: create-project.yml
+

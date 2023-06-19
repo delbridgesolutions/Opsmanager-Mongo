@@ -1,0 +1,19 @@
+om_username: "marina.ilina@commercetools.com"
+OrganizationName: "Commercetools Staging"
+s3_blockstore_name:
+  - staging-om-snapshot-store
+s3_oplogstore_name:
+  - staging-om-oplog-store
+project_names:
+  - ansible-test-1-cn-northwest1.aws.commercetools.cn-0
+  - ansible-test-2-cn-northwest1.aws.commercetools.cn-0
+  - ansible-test-3-cn-northwest1.aws.commercetools.cn-0
+  - ansible-test-4-cn-northwest1.aws.commercetools.cn-0
+om_url:
+  - https://staging-om.db.cn-northwest-1.aws.commercetoolscn.cn:8443
+  #- https://ops-manager-dev-1.db.cn-northwest-1.aws.commercetoolscn.cn:8443
+
+DB_endponits: 
+ - ops-manager-dev-1.db.cn-northwest-1.aws.commercetoolscn.cn
+ - ops-manager-dev-2.db.cn-northwest-1.aws.commercetoolscn.cn
+ - ops-manager-dev-0.db.cn-northwest-1.aws.commercetoolscn.cn

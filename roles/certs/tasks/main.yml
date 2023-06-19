@@ -1,0 +1,57 @@
+- name: Get instance FQDN using tag name
+  shell: "aws ec2 describe-tags --filters Name=resource-id,Values=$(curl -s http://169.254.169.254/latest/meta-data/instance-id) Name=key,Values={{ tag_value }} --region {{ aws_region }} --query 'Tags[0].Value' --output text"
+  register: tag_name_result
+
+- name: Print instance FQDN tag
+  debug:
+    var: tag_name_result.stdout
+
+- name: Extract domain name from tag name
+  # Use a regular expression to extract the domain name from the instance tag name
+  set_fact:
+    domain_name: "{{ tag_name_result.stdout }}"
+
+- name: Set hostname
+  become: yes
+  become_user: root
+  ansible.builtin.hostname:
+    name: "{{ domain_name }}"
+    use: systemd
+  when: domain_name is defined
+
+- name: Run certbot for certificate creation for all regular machines
+  shell: "/usr/local/bin/certbot certonly --agree-tos --email ops+aws-cn-stage-mongodb@commercetools.com -n --dns-route53 -d {{ domain_name }} --dns-route53-propagation-seconds 60 --key-type rsa"
+  when: domain_name is defined
+  register: certbot_output
+  until: certbot_output is succeeded
+  retries: 5
+  delay: 10
+  
+- name: Concatenate files and create cert for server
+  become: yes
+  become_user: root
+  ansible.builtin.shell: "sudo cat /etc/letsencrypt/live/{{ domain_name }}/{fullchain.pem,privkey.pem} | sudo tee /etc/pki/tls/certs/mongo.pem"
+  when: domain_name is defined
+
+- name: Copy LE CA cert to /etc/pki/tls/certs/ca.pem
+  become: yes
+  become_user: root
+  ansible.builtin.shell: "sudo cat /etc/letsencrypt/live/{{ domain_name }}/chain.pem | sudo tee /etc/pki/tls/certs/ca.pem"
+  when: domain_name is defined
+
+- name: Copy cert renewal scripts to servers
+  copy:
+    src: ../../files/certrenewal.sh
+    dest: /home/ec2-user
+    owner: ec2-user
+    group: ec2-user
+    mode: 0555
+
+- name: Create Cronjob for certificate renewal
+  ansible.builtin.cron:
+    name: "LE Cert Renewal"
+    month: "*/2"
+    hour: "0"
+    minute: "0"
+    day: "1"
+    job: "/home/ec2-user/certrenewal.sh"

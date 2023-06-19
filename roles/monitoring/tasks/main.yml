@@ -1,0 +1,25 @@
+- name: Include om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+
+- name: "Enable monitoring on hosts of project-rs0 and project-rs1"
+  vars:
+    url: "{{ om_url.0 }}/api/public/v1.0/groups/{{ project_id }}/hosts?pretty=true"
+    ports:
+      - 27017
+  uri:
+    url: "{{ url }}"
+    validate_certs: no
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
+    user: "{{ public_key }}"
+    password: "{{ private_key }}"
+    with_items:
+      - "{{ projects_rs0_hosts }}"
+      - "{{ projects_rs1_hosts }}"
+    body_format: json
+    body: '{"hostname": "{{ item }}", "port": "{{ ports[0] }}" }'
+    status_code: 201
+    return_content: yes

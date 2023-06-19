@@ -1,0 +1,129 @@
+- name: Ignore warnings raised for files with unknown extensions while loading (2.7)
+  include_vars:
+    dir: vars
+    ignore_unknown_extensions: True
+    extensions: ['yaml', 'yml', 'json']
+
+- name: Copy MongoDB 6.0 binary to OM servers
+  copy:
+    src: ../../downloads/mongodb-enterprise-server-6.0.2-1.amzn2.x86_64.rpm
+    dest: /home/ec2-user
+    owner: ec2-user
+    group: ec2-user
+    mode: preserve
+
+- name: Stop mongod if running/exists
+  become: yes
+  become_user: root
+  shell: if systemctl is-enabled --quiet s3metadatadb; then systemctl stop mongod && echo stopped ; fi
+  register: output
+  changed_when: "'stopped' in output.stdout"
+
+- name: Copy MetadataDB conf to servers
+  become: yes
+  become_user: root
+  copy:
+    src: ../../files/s3metadatadb.conf
+    dest: /etc/s3metadatadb.conf
+    owner: root
+    group: root
+    force: yes
+    mode: 0744
+
+- name: Copy s3metadatadb.service to servers
+  become: yes
+  become_user: root
+  copy:
+    src: ../../files/s3metadatadb.service
+    dest: /usr/lib/systemd/system/
+    owner: root
+    group: root
+    force: yes
+    mode: 0664
+
+
+- name: reload services
+  become: yes
+  become_user: root
+  systemd:
+    daemon_reload: yes
+
+- name: Create necessary dir for data
+  become: yes
+  become_user: root
+  file:
+    path: /s3metadata/db
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: '0755'
+
+- name: Create necessary dir for logs
+  become: yes
+  become_user: root
+  file:
+    path: /s3metadata/logs
+    state: directory
+    owner: mongod
+    group: mongod
+    mode: '0755'
+
+- name: Change Keyfile permissions and ownership
+  become: yes
+  become_user: root
+  file:
+    path: /etc/mongodb.key
+    owner: mongod
+    group: mongod
+    mode: '0400'
+- name: Restart service and wait for it to start
+  block:
+    - name: Start mongod service
+      service:
+        name: s3metadatadb
+        state: started
+        enabled: yes
+      become: yes
+      become_user: root
+
+    - name: Wait for service to start
+      wait_for:
+        host: localhost
+        port: 28000
+        state: started
+        delay: 10
+        timeout: 300
+
+- name: s3metadatadb enable replication 1
+  command: "mongosh --port {{ backing_DB_port }} --eval 'rs.initiate()'"
+  run_once: true
+  vars:
+    HOST_COUNT: "{{ groups[group_name] | length }}"
+  when: "HOST_COUNT | int >= 3"
+
+- name: Create user for s3metadatadb
+  command: mongosh --port 28000 --eval 'db.createUser({user:"{{ mongodb_username }}",pwd:"{{ mongodb_password }}",roles:[{db:"admin",role:"root"}]})' admin
+  delegate_to: "{{ groups[group_name].0 }}"
+  run_once: true
+  vars:
+    HOST_COUNT: "{{ groups[group_name] | length }}"
+  when: "HOST_COUNT | int >= 3"
+
+- name: appdb.conf enable replication 2
+  command: mongosh -u "{{ mongodb_username }}" -p "{{ mongodb_password }}" --port "{{ backing_DB_port }}" --eval 'rs.add("{{groups[group_name].1 }}:{{ backing_DB_port }}")'
+  delegate_to: "{{ groups[group_name].0 }}"
+  run_once: true
+  vars:
+    HOST_COUNT: "{{ groups[group_name] | length }}"
+  when: "HOST_COUNT | int >= 3"
+  become: yes
+  become_user: mongod
+- name: appdb.conf enable replication 3
+  command: mongosh -u "{{ mongodb_username }}" -p "{{ mongodb_password }}" --port "{{ backing_DB_port }}" --eval 'rs.add("{{groups[group_name].2 }}:{{ backing_DB_port }}")'
+  delegate_to: "{{ groups[group_name].0 }}"
+  run_once: true
+  vars:
+    HOST_COUNT: "{{ groups[group_name] | length }}"
+  when: "HOST_COUNT | int >= 3"
+  become: yes
+  become_user: mongod

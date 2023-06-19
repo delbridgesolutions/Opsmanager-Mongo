@@ -1,0 +1,85 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+
+- name: API key
+  set_fact:
+     Api_Keys: "{{ lookup('amazon.aws.aws_secret', ApiKeySecretName, region=aws_region)}}"
+
+- name: "Retrieve  Organization"
+  uri:
+    url: "{{ om_url.0 }}/api/public/v1.0/orgs/"
+    validate_certs: false
+    method: GET
+    headers:
+      Content-Type: "application/json"
+    status_code: 200
+    return_content: yes
+    user: "{{ Api_Keys.public_key }}"
+    password: "{{ Api_Keys.private_key }}"
+  register: existing_organization
+- name:  Print the full output
+  ansible.builtin.debug:
+    msg: "{{  existing_organization.json.results  | map(attribute='name') | list }}"
+
+- name: Creating Organization if it doesn't exist
+  when: "'{{ OrganizationName }}' not in existing_organization.json.results  | map(attribute='name') | list"
+  block:
+    - name: "Create initial organization"
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/orgs?pretty=true"
+        validate_certs: false
+        method: POST
+        headers:
+          Content-Type: "application/json"
+        body_format: json
+        body: '{"name": "{{ OrganizationName }}"}'
+        status_code: 201
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"
+      register: organization
+
+    - name:  Print the full output
+      ansible.builtin.debug:
+        var: organization
+
+    - name: Save secret in AWS Secrets Manager
+      community.aws.secretsmanager_secret:
+        name: "{{ OrganizationSecretName }}"
+        state: present
+        secret: "{{ organization.json.id }}"
+        region: "{{ aws_region }}"
+
+    - name: "Retrieve Admin User"
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/users/byName/{{ om_username }}"
+        validate_certs: false
+        method: GET
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"
+      register: user_info
+
+    - name: "Add user as Org Owner"
+      uri:
+        url: "{{ om_url.0 }}/api/public/v1.0/users/{{ user_info.json.id }}?pretty=true"
+        validate_certs: false
+        method: PATCH
+        headers:
+          Content-Type: "application/json"
+          Accept: "application/json"
+        body_format: json
+        body: '{
+            "roles": [{
+              "orgId": "{{ organization.json.id }}",
+              "roleName": "ORG_OWNER"
+            }]
+          }'
+        status_code: 200
+        return_content: yes
+        user: "{{ Api_Keys.public_key }}"
+        password: "{{ Api_Keys.private_key }}"

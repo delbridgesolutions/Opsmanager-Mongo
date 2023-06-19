@@ -1,0 +1,38 @@
+- name: Configure Certs for Orders and Carts servers
+  hosts: all
+  gather_facts: yes
+  vars:
+    om_nodes: 'false'
+    Enable_backup: 'false'
+    Cluster_Nodes: 'True'
+    group_name: "tag_deployment_projects_mihai"
+    database_creds_name: "MongoDB-Creds"
+    tag_value: "fqdn"
+    first_user: 'false'
+    aws_region: "cn-northwest-1"
+    MongoKeySecretName: "MongoKey"
+    ApiKeySecretName: "AdminApiKey"
+    OrganizationSecretName: "COMMERCETOOLSSTAGING"
+    MongoSecretName: "MongoDB-Creds"
+    project_name: "ansible-test-1-cn-northwest1.aws.commercetools.cn-0"
+    auto_generated_config: "ansible-initial.json"
+  pre_tasks:
+    - name: Fetch the Secrets from the aws Secret manager
+      set_fact:
+        mongo_key: "{{ lookup('amazon.aws.aws_secret', MongoKeySecretName, region=aws_region)}}"
+        mongodb_password: "{{ (lookup('amazon.aws.aws_secret', MongoSecretName, region=aws_region) | from_json).Password }}"
+        mongodb_username: "{{ (lookup('amazon.aws.aws_secret', MongoSecretName, region=aws_region) | from_json).Username }}"
+        Api_keys: "{{ lookup('amazon.aws.aws_secret', ApiKeySecretName, region=aws_region)}}"
+  roles:
+    - os-changes
+    - certs
+    - name: Run user-project role only on localhost
+      role: usersorgprjs
+      delegate_to: localhost
+      run_once: true
+    - nodes
+    - name: Run Automation role only on localhost
+      role: automation
+      delegate_to: localhost
+      run_once: true
+

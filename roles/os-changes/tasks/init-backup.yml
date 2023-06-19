@@ -1,0 +1,189 @@
+- name: Update packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - cyrus-sasl
+    - cyrus-sasl-gssapi
+    - cyrus-sasl-plain
+    - krb5-libs
+    - libcurl
+    - net-snmp
+    - openldap
+    - openssl
+    - xz-libs
+
+- name: Create Mount Directory
+  become: true
+  file:
+    path: "{{ item.path }}"
+    state: directory
+  loop: 
+    - { path: /data }
+    - { path: /s3metadata }
+    - { path: /backups/head }
+
+- name: Format filesystem
+  filesystem:
+    fstype: xfs
+    dev: "{{ item.dev }}"
+    state: present
+  loop:
+    - { dev: /dev/sdf }
+    - { dev: /dev/sdg }
+    - { dev: /dev/sdh }
+  register: mkfs_result
+  changed_when: false
+  ignore_errors: true
+
+- name: Add mount entries to /etc/fstab
+  mount:
+    path: "{{ item.path }}"
+    src: "{{ item.dev }}"
+    fstype: xfs
+    opts: defaults,noatime
+    state: mounted
+  loop:
+    - { dev: /dev/sdf, path: /data }
+    - { dev: /dev/sdg, path: /s3metadata }
+    - { dev: /dev/sdh, path: /backups/head }
+  when: mkfs_result.changed
+  ignore_errors: true
+
+- name: Set vm.zone_reclaim_mode Kernel Parameter
+  become: true
+  sysctl:
+    name: vm.zone_reclaim_mode
+    value: 0
+    state: present
+  ignore_errors: true
+
+- name: Verify vm.zone_reclaim_mode Setting
+  command: grep "vm.zone_reclaim_mode=0" /etc/sysctl.conf
+  register: zone_reclaim_result
+  failed_when: false
+
+- name: Print Error if Zone Reclaim Mode Setting is Incorrect
+  debug:
+    msg: "Incorrect value for Zone Reclaim Mode"
+  when: zone_reclaim_result.rc != 0
+
+- name: Set vm.swappiness Kernel Parameter
+  become: true
+  sysctl:
+    name: vm.swappiness
+    value: 1
+    state: present
+  ignore_errors: true
+
+- name: Verify vm.swappiness Setting
+  command: grep "vm.swappiness=1" /etc/sysctl.conf
+  register: swappiness_result
+  failed_when: false
+
+- name: Print Error if VM Swappiness Setting is Incorrect
+  debug:
+    msg: "Incorrect value for VM Swappiness"
+  when: swappiness_result.rc != 0
+
+- name: Apply production notes for ulimits
+  become: true
+  lineinfile:
+    path: /etc/security/limits.conf
+    line: "{{ item.line }}"
+  loop:
+    - { line: "mongod hard fsize unlimited" }
+    - { line: "mongod soft fsize unlimited" }
+    - { line: "mongod hard cpu unlimited" }
+    - { line: "mongod soft cpu unlimited" }
+    - { line: "mongod hard as unlimited" }
+    - { line: "mongod soft as unlimited" }
+    - { line: "mongod hard memlock unlimited" }
+    - { line: "mongod soft memlock unlimited" }
+    - { line: "mongod hard nofile 64000" }
+    - { line: "mongod soft nofile 64000" }
+    - { line: "mongod hard noproc 64000" }
+    - { line: "mongod soft noproc 64000" }
+  notify:
+      - Reload sysctl
+
+- name: Check if init script exists
+  stat:
+    path: /etc/init.d/disable-transparent-hugepages
+  register: init_script_stat
+
+- name: Create init script to disable THP
+  when: not init_script_stat.stat.exists
+  copy:
+    dest: /etc/init.d/disable-transparent-hugepages
+    mode: "0755"
+    content: |
+      #!/bin/bash
+      ### BEGIN INIT INFO
+      # Provides:          disable-transparent-hugepages
+      # Required-Start:    $local_fs
+      # Required-Stop:
+      # X-Start-Before:    mongod mongodb-mms-automation-agent
+      # Default-Start:     2 3 4 5
+      # Default-Stop:      0 1 6
+      # Short-Description: Disable Linux transparent huge pages
+      # Description:       Disable Linux transparent huge pages, to improve
+      #                    database performance.
+      ### END INIT INFO
+
+      case $1 in
+        start)
+          if [ -d /sys/kernel/mm/transparent_hugepage ]; then
+            thp_path=/sys/kernel/mm/transparent_hugepage
+          elif [ -d /sys/kernel/mm/redhat_transparent_hugepage ]; then
+            thp_path=/sys/kernel/mm/redhat_transparent_hugepage
+          else
+            return 0
+          fi
+
+          echo 'never' > ${thp_path}/enabled
+          echo 'never' > ${thp_path}/defrag
+
+          re='^[0-1]+$'
+          if [[ $(cat ${thp_path}/khugepaged/defrag) =~ $re ]]
+          then
+            # RHEL 7
+            echo 0  > ${thp_path}/khugepaged/defrag
+          else
+            # RHEL 6
+            echo 'no' > ${thp_path}/khugepaged/defrag
+          fi
+
+          #Set Readahead for Data Disk
+          blockdev --setra 8 /dev/xvdb
+          unset re
+          unset thp_path
+          ;;
+      esac
+      ENDSCRIPT
+      )
+
+- name: Add disable-transparent-hugepages to chkconfig
+  become: true
+  command: chkconfig --add disable-transparent-hugepages
+  notify: 
+      - Reboot server
+  when: not init_script_stat.stat.exists
+
+- name: Copy MongoDB key to server
+  copy:
+    content: "{{ mongo_key }}"
+    dest: /etc/mongodb.key
+    mode: "400"
+- name: Create Lets Encrypt directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: ec2-user
+    group: ec2-user
+    mode: "0755"
+  loop:
+    - /var/log/letsencrypt
+    - /etc/letsencrypt
+    - /var/lib/letsencrypt

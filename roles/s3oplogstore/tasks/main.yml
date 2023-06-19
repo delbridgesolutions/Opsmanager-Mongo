@@ -1,0 +1,61 @@
+- name: Include ../../vars/om-vars.yaml written by terraform during deployment
+  include_vars:
+    file: vars/global-vars.yml
+
+- name: "Set OM Base URL"
+  set_fact:
+    om_base_url: "{{ om_url.0 }}/api/public/v1.0/admin/backup/oplog/s3Configs"
+
+- name: "Set body for post request"
+  set_fact:
+    call_body: '{ 
+       "assignmentEnabled": true,
+       "s3AuthMethod": "IAM_ROLE",
+       "encryptedCredentials": false,
+       "pathStyleAccessEnabled": true,
+       "acceptedTos": true,
+       "s3MaxConnections": 50,
+       "id": "s3oplogstore",
+       "sseEnabled": true,
+       "labels": [
+         "l1",
+         "l2"
+       ],
+       "s3BucketEndpoint": "s3.amazonaws.com",
+       "s3BucketName": "{{ s3_oplogstore_name.0 }}",
+       "uri": "mongodb://localhost:28000",
+       "ssl": false,
+       "writeConcern": "W2",
+       "disableProxyS3": "true"}'
+
+- name: "Printing API call body"
+  debug: var=call_body
+
+- name: "Check if S3 exists"
+  uri:
+    url: "{{ om_base_url }}/s3oplogstore?pretty=true"
+    validate_certs: no
+    method: GET
+    headers:
+      Content-Type: "application/json"
+    status_code: 200, 404
+    return_content: yes
+    user: "{{ public_key }}"
+    password: "{{ private_key }}"
+  register: s3_oplog_created
+
+- name: "Configure S3 Oplogstore"
+  uri:
+    url: "{{ om_base_url }}?pretty=true"
+    validate_certs: no
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    body_format: json
+    body: "{{ call_body }}"
+    status_code: 201
+    return_content: yes
+    user: "{{ public_key }}"
+    password: "{{ private_key }}"
+  register: result
+  when: s3_oplog_created.status == 404

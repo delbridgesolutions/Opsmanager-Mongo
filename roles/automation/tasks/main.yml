@@ -1,0 +1,46 @@
+- name: Ignore warnings raised for files with unknown extensions while loading (2.7)
+  include_vars:
+    dir: vars
+    ignore_unknown_extensions: True
+    extensions: ['yaml', 'yml', 'json']
+- name: Determine current directory
+  command: pwd
+  register: current_dir
+
+- name: Set Ansible home directory
+  set_fact:
+    ansible_home: "{{ current_dir.stdout }}"
+
+- name: Fetch automationConfig
+  uri:
+    url: "{{ om_url.0 }}/api/public/v1.0/groups/{{ project_keys.Project_id }}/automationConfig?pretty=true"
+    method: GET
+    user: "{{ Api_keys.public_key }}"
+    password: "{{ Api_keys.private_key }}"
+    headers:
+      Accept: "application/json"
+    return_content: yes
+    status_code: 200
+    dest: "vars/{{ project_name }}.json"
+
+- name: Execute 'merge.sh' script with arguments
+  become: yes
+  become_user: root
+  script:
+    cmd: files/merge.sh vars/{{ project_name }}.json  vars/{{ auto_generated_config }} vars/{{ project_name }}-merge.json
+  environment:
+    ANSIBLE_HOME: "{{ ansible_home }}"
+
+- name: "Initiate Projects Automation"
+  uri:
+    url: "{{ om_url.0 }}/api/public/v1.0/groups/{{ project_keys.Project_id }}/automationConfig?pretty=true"
+    validate_certs: no
+    method: PUT
+    headers:
+      Content-Type: "application/json"
+    body: "{{ lookup('file', 'vars/' + project_name + '-merge.json' ) }}"
+    body_format: json
+    status_code: 200
+    return_content: yes
+    user: "{{ Api_keys.public_key }}"
+    password: "{{ Api_keys.private_key }}"

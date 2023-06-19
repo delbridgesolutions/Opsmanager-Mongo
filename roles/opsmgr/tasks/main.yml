@@ -1,0 +1,120 @@
+- name: Ignore warnings raised for files with unknown extensions while loading (2.7)
+  include_vars:
+    dir: vars
+    ignore_unknown_extensions: True
+    extensions: ['yaml', 'yml', 'json']
+
+- name: Copy OM Binary to OM servers
+  copy:
+    src: ../../downloads/mongodb-mms-6.0.12.100.20230406T1854Z.x86_64.rpm
+    dest: /home/ec2-user
+    owner: ec2-user
+    group: ec2-user
+    mode: preserve
+
+- name: Stop mongodb-mms if exists
+  become: yes
+  become_user: root
+  shell: if systemctl is-enabled --quiet mongodb-mms; then systemctl stop mongodb-mms && echo stopped; fi
+  register: output
+  changed_when: "'stopped' in output.stdout"
+
+- name: Install OM
+  become: yes
+  become_user: root
+  yum:
+    name: /home/ec2-user/mongodb-mms-6.0.12.100.20230406T1854Z.x86_64.rpm
+    state: present
+
+- name: Copy gen.key to all OM servers
+  become: yes
+  become_user: root
+  copy:
+    src: ../../files/gen.key
+    dest: /etc/mongodb-mms/gen.key
+
+- name: Replace a localhost appdb with our own
+  become: yes
+  become_user: root
+  lineinfile:
+    path: /opt/mongodb/mms/conf/conf-mms.properties
+    regexp: '^mongo.mongoUri'
+    line: mongo.mongoUri=mongodb://{{ mongodb_username }}:{{ mongodb_password }}@{{DB_endponits.0}}:{{mongod_port}},{{DB_endponits.1}}:{{ mongod_port}},{{DB_endponits.2}}:{{ mongod_port}}/?replicaSet=appdb&authSource=admin
+
+- name: Add settings to /opt/mongodb/mms/conf/conf-mms.properties for server 1
+  become: yes
+  become_user: root
+  run_once: true
+  delegate_to: "{{ groups[group_name].0 }}"
+  blockinfile:
+    path: /opt/mongodb/mms/conf/conf-mms.properties
+    block: |
+      {{ item.setting }}={{ item.value }}
+    marker: "# Instance Parameter Overrides"
+  loop:
+    - { setting: mms.ignoreInitialUiSetup, value: "true" }
+    - { setting: mms.centralUrl, value: "https://{{DB_endponits.0}}:8443" }
+    - { setting: mms.https.PEMKeyFile, value: "/etc/pki/tls/certs/mongo.pem" }
+    - { setting: mms.https.CAFile, value: "/etc/pki/tls/certs/ca-bundle.crt" }
+    - { setting: mms.https.ClientCertificateMode, value: "agents_only" }
+    - { setting: mongodb.ssl.PEMKeyFile, value: "/etc/pki/tls/certs/mongo.pem" }
+    - { setting: automation.versions.source, value: "hybrid" }
+    - { setting: mms.adminEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.fromEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.replyToEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.mail.hostname, value: localhost }
+    - { setting: mms.mail.port, value: "25" }
+    - { setting: mms.mail.ssl, value: "true" }
+    - { setting: mms.mail.transport, value: smtp }
+    #- { setting: mms.minimumTLSVersion, value: TLSv1.2 }
+    - { setting: mms.user.bypassInviteForExistingUsers, value: "true" }
+    # - { setting: backup.forceWtSnapshot, value: "true" }
+    # - { setting: backup.forceSnapshot, value: "true" }
+
+- name: Add settings to /opt/mongodb/mms/conf/conf-mms.properties for server 2
+  become: yes
+  become_user: root
+  run_once: true
+  delegate_to: "{{ groups[group_name].1 }}"
+  blockinfile:
+    path: /opt/mongodb/mms/conf/conf-mms.properties
+    block: |
+      {{ item.setting }}={{ item.value }}
+    marker: "# Instance Parameter Overrides"
+  loop:
+    - { setting: mms.ignoreInitialUiSetup, value: "true" }
+    - { setting: mms.centralUrl, value: "https://{{DB_endponits.0}}:8443" }
+    #- { setting: mms.remoteIp.header, value: "https://staging-om-internal.db.cn-northwest-1.aws.commercetoolscn.cn" }
+    - { setting: mms.https.CAFile, value: "/etc/pki/tls/certs/ca-bundle.crt" }
+    - { setting: mms.https.ClientCertificateMode, value: "agents_only" }
+    - { setting: mms.https.PEMKeyFile, value: "/etc/pki/tls/certs/mongo.pem" }
+    - { setting: mongodb.ssl.PEMKeyFile, value: "/etc/pki/tls/certs/mongo.pem" }
+    - { setting: automation.versions.source, value: "hybrid" }
+    - { setting: mms.adminEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.fromEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.replyToEmailAddr, value: no-reply@opsmanager.local }
+    - { setting: mms.mail.hostname, value: localhost }
+    - { setting: mms.mail.port, value: "25" }
+    - { setting: mms.mail.ssl, value: "true" }
+    - { setting: mms.mail.transport, value: smtp }
+    #- { setting: mms.minimumTLSVersion, value: TLSv1.2 }
+    - { setting: mms.user.bypassInviteForExistingUsers, value: "true" }
+    # - { setting: backup.forceWtSnapshot, value: "true" }
+    # - { setting: backup.forceSnapshot, value: "true" }
+
+- name: "Create directory for head database"
+  become: yes
+  become_user: root
+  file: path=/backups/head state=directory mode=0755 owner=mongodb-mms group=mongodb-mms
+
+- name: "Enable mongodb-mms service"
+  become: yes
+  become_user: root
+  service:
+    name: mongodb-mms
+    enabled: yes
+
+- name: "Start mongodb-mms"
+  become: yes
+  become_user: root
+  service: name=mongodb-mms state=started
